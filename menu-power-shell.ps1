@@ -15,87 +15,10 @@ Write-Host "Los parámetros son:"$Param1 " " $Param2
 pause
 
 #Función 1. Promocionar a CD
-function PromocionarCD
+function promocionarCD
 {
-Write-Host "Ejecuto el comando para promocionar a CD"
-$dominioFQDN = "upv.es"
-$dominioNETBIOS = "upv"
-$adminPass = "Hola01"
-Import-Module ADDSDeployment
-Install-ADDSForest
--CreateDnsDelegation:$False `
--DatabasePath "C:\Windows\NTDS" `
--DomainMode "Default" `
--DomainName $dominioFQDN `
--DomainNetbiosName $dominioNETBIOS `
--SafeModeAdministratorPassword (ConvertTo-SecureString -string $adminPass -AsPlainText -Force) `
--ForestMode "Default" `
--InstallDns:$True `
--LogPath "C:\Windows\NTDS" `
--SysvolPath "C:\Windows\SYSVOL" `
--Force:$true
+Write-Host "Ejecuto el comando CD"
 }
-function DespromocionarCD
-{
-Write-Host "Ejecuto el comando para despromocionar el CD"
-Import-Module ADDSDeployment
-Uninstall-ADDSDomainController -DemoteOperationMasterRole:$true -ForceRemoval:$true -Force:$true
-}
-function PromocionarCDreplica
-{
-Write-Host "Ejecuto el comando para promocionar la replica"
-$nameServer="master-upv-es-replica"
-$addressIP="192.168.1.202"
-$networkInternal="Ethernet 1"
-Rename-Computer -NewName "master-upv-es-replica"
-Get-NetAdapter –name $networkInternal | Remove-NetIPAddress -Confirm:$false
-Get-NetAdapter –name $networkInternal | New-NetIPAddress –addressfamily IPv4 –ipaddress 192.168.1.202 –prefixlength 24 –type unicast
-Restart-Computer -force
-Import-Module ServerManager
-Add-WindowsFeature AD-Domain-Services
-Import-Module ADDSDeployment
-Install-ADDSDomainController `
--DomainName "upv.es" `
--Credential (Get-Credential) `
--SiteName "Default-First-Site-Name" `
--InstallDNS:$true `
--NoGlobalCatalog:$false `
--CreateDNSDelegation:$false `
--ReplicationSourceDC "master-upv-es.upv.es" `
--CriticalReplicationOnly:$false `
--DatabasePath "C:\Windows\NTDS" `
--LogPath "C:\Windows\NTDS" `
--SysvolPath "C:\Windows\SYSVOL" `
--Force:$true
-}
-function ReplicarDatos
-{
-Write-Host "Ejecuto el comando para replicar los datos"
-dsquery user -name *
-repadmin /replsum * /bysrc /bydest /sort:delta
-}
-function Adaptador
-{
-Write-Host "Ejecuto el comando para saber el adaptador"
-Get-NetAdapter
-}
-function SSID
-{
-Write-Host "Ejecuto el comando para saber el SSID"
-whoami /user
-}
-function SaberServidor
-{
-Write-Host "Ejecuto el comando para saber el servidor al que estas conectado"
-echo %logonserver%
-}
-function SaberServicios
-{
-Write-Host "Ejecuto el comando para saber servicios instalados"
-Get-Windowsfeature
-}
-
-
 
 #Función que nos muestra un menú por pantalla con 3 opciones y una última para salir del mismo
 # La función “mostrarMenu”, puede tomar como parámetro un título y devolverá por pantalla 
@@ -111,14 +34,9 @@ function mostrarMenu
      Write-Host "================ $Titulo================" 
       
      
-     Write-Host "1) Promocionar CD" 
-     Write-Host "2) Despromocionar CD" 
-     Write-Host "3) Promocionar CD replica" 
-     Write-Host "4) Replicar Datos"     
-     Write-Host "5) Adaptador"     
-     Write-Host "6) Usuario y SSID"     
-     Write-Host "7) Saber servidor"
-     Write-Host "8) Saber servicios instalados"
+     Write-Host "1) Primera Opción" 
+     Write-Host "2) Segunda Opción" 
+     Write-Host "3) Tercera Opción" 
      Write-Host "S) Presiona 'S' para salir" 
 }
 #Bucle principal del Script. El bucle se ejecuta de manera infinita hasta que se cumple
@@ -134,35 +52,15 @@ do
      { 
            '1' { 
                 Clear-Host  
-                PromocionarCD 
+                'Primera Opción' 
                 pause
            } '2' { 
                 Clear-Host  
-                DespromocionarCD 
+                'Segunda Opción' 
                 pause
            } '3' { 
                 Clear-Host  
-                PromocionarCDreplica 
-                pause
-           } '4' { 
-                Clear-Host  
-                ReplicarDatos
-                pause
-           } '5' { 
-                Clear-Host  
-                Adaptador
-                pause
-           } '6' { 
-                Clear-Host  
-                SSID
-                pause
-           } '7' { 
-                Clear-Host  
-                SaberServidor
-                pause
-           } '8' { 
-                Clear-Host  
-                Saberservicios 
+                'Tercera Opción' 
                 pause
            } 's' {
                 'Saliendo del script...'
