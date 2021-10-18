@@ -1,3 +1,8 @@
+
+
+No utilizado ya que se ha configurado por GUI
+
+
 #Fuente: https://gallery.technet.microsoft.com/scriptcenter/Menu-simple-en-PowerShell-95e1f923
 
 #Paso de parámetros al ejecutar el script en la consola
