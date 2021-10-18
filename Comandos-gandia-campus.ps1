@@ -3,7 +3,7 @@ Install-WindowsFeature –Name AD-Domain-Services –IncludeManagementTools
 
 
 #Añadir dominio
-
+#COmando no utilizado por error
 PS C:\> 
 Import-Module ADDSDeployment
 Install-ADDSDomain `
