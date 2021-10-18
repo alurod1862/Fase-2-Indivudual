@@ -1,1 +1,2 @@
-
+#Comando para instalatar AD DS Domain-server
+Install-WindowsFeature –Name AD-Domain-Services –IncludeManagementTools
